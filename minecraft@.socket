@@ -1,3 +1,4 @@
+# /etc/systemd/system/minecraft@.socket
 # input to service: echo "something" > /run/minecraft-instancename.stdin
 
 [Unit]
