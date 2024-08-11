@@ -1,0 +1,37 @@
+# /etc/systemd/system/minecraft@.service
+# launch with systemctl start minecraft@instancename
+# jar files go to $JARPATH. If server.conf exists, it overrides environment variables.
+# logs: journalcts -f -u minecraft@instancename
+
+[Unit]
+Description=Minecraft Server %i
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/minecraft/%i
+ExecStart=java -Xms${MINMEM} -Xmx${MAXMEM} $GC -jar ${JARPATH}/${VERSION} nogui
+User=minecraft
+Group=minecraft
+PrivateUsers=true
+ProtectSystem=full
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+#ProtectHome=true
+EnvironmentFile=-/home/minecraft/%i/server.conf
+Restart=on-failure
+RestartSec=60s
+TimeoutStopSec=150s
+Sockets=minecraft@.socket
+StandardInput=socket
+StandardOutput=journal
+StandardError=journal
+Environment="MINMEM=1024M"
+Environment="MAXMEM=2048M"
+Environment="GC=-XX:+UseShenandoahGC"
+Environment="JARPATH=/opt/minecraft/jars"
+Environment="VERSION=latest"
+
+[Install]
+WantedBy=multi-user.target

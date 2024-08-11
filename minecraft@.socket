@@ -1,0 +1,11 @@
+# input to service: echo "something" > /run/minecraft-instancename.stdin
+
+[Unit]
+PartOf=minecraft@.service
+
+[Socket]
+ListenFIFO=%t/minecraft-%i
+SocketMode=0660
+SocketUser=minecraft
+SocketGroup=minecraft
+RemoveOnStop=true
